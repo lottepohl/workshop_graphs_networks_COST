@@ -34,6 +34,12 @@ Once the graph is constructed, you can inspect its structure by executing print(
 if(!require(igraph)) install.packages("igraph"); library(igraph)
 ```
 
+```{r}
+# list available functions for the igraph package:
+ls("package:igraph")
+```
+
+
 ```{r graph-one}
 # Define the vertices
 vertices <- c("L", "V", "K", "A") 
@@ -103,4 +109,85 @@ plot(g_med_isl)
 # Write your answer above this line
 ```
 
+## Practice: Creating and manipulating graphs
+
+```{r create-and-manipulate-graphs}
+# Load the igraph library
+library(igraph)
+
+# Create the graph using an edge list
+G2 <- igraph::graph(
+  edges = c(1, 2,
+            2, 3,
+            1, 4,
+            2, 5,
+            3, 5),
+  n = 5,
+  directed = FALSE
+)
+
+# Look into structure
+print(G2)
+
+# Visualise
+plot(G2)
+```
+
+## Practice: The humpback whale migration Network
+
+Humpback whales, as majestic migrators, traverse vast oceanic distances annually, visiting feeding and breeding grounds. These migration patterns are crucial for their survival and have significant ecological impacts. Understanding these patterns is vital for conservation efforts and ecological studies.
+
+> I chose to recreate Fig 3. from Rizzo and Schulte, 2009 (https://doi.org/10.1017/S0025315409000332)
+
+### Create Data Frames
+
+Begin by creating two data frames in R. The first, whale_locations, will list various oceanic regions frequented by whales. The second, migration_routes, will detail the routes whales take from one region to another.
+
+```{r humpback-migrations}
+
+whale_locations <- data.frame(
+  location = c("Bering Sea", "Japan", "Hawaii", "Alaska", "California", "Mexico", "Dominican Republic", 
+               "Maine", "Nova Scotia", "Newfoundland", "Greenland", "Iceland")
+)
+ 
+migration_routes <- data.frame(
+  from = c("Bering Sea", "Hawaii", "Hawaii", "Hawaii", "California", "Dominican Republic", "Dominican Republic", "Dominican Republic", "Dominican Republic", "Dominican Republic", "Alaska", "California"),
+  to = c("Japan", "Alaska", "California", "Mexico", "Mexico", "Maine", "Newfoundland", "Greenland", "Iceland", "Nova Scotia", "California", "Alaska")
+  
+)
+
+```
+
+### Construct the Graph
+
+Use the ‘igraph’ package to build a directed graph from these data frames. In this graph, each region is a vertex, and each migration route is a directed edge.
+
+```{r}
+g_humpback <- igraph::graph_from_data_frame(migration_routes, directed = T, vertices = whale_locations)
+```
+
+### Visualize the Graph
+Analyze the graph by printing its structure and plotting it. This will help in identifying key migratory paths and regions that are central to whale migration.
+
+```{r}
+print(g_humpback)
+plot(g_humpback) # looks nicer in this example
+plot(g_humpback, layout = layout_with_gem, edge.curved = TRUE)
+```
+### Inspect the graph
+
+```{r}
+
+is.simple(g_humpback)
+any_multiple(g_humpback)
+which_multiple(g_humpback) 
+count_multiple(g_humpback) 
+any_loop(g_humpback)
+which_loop(g_humpback)
+
+```
+
+```{r}
+
+```
 
