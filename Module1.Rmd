@@ -11,30 +11,13 @@ knitr::opts_chunk$set(echo = T)
 
 ## First graph: Kaliningrad Bridge Problem
 
-In our visual representation of the Königsberg bridges challenge, we employ vertices—denoted by V—to stand for Königsberg’s separate quarters, labeled according to the first letter of each area:
-
-L for Lomse
-V for Vorstadt-Haferberg
-K for Kneiphof
-A for Altstadt-Loebenicht
-To depict the bridges linking these regions, we introduce edges—represented by e—assigned the letters p, q, r, s, t, u, and v.
-
-These edges don’t dictate a fixed crossing direction, which tells us our graph is undirected. This contrasts with directed graphs, or digraphs, where each edge, resembling a one-way street, permits passage in just one specified direction.
-
-Note that the resulting graph will not be a complete graph, i.e., a graph in which every vertex is connected to every other vertex by an edge.
-
-Let’s proceed to construct our graph, denoted as G, utilizing the ‘igraph’ package. This package is instrumental not only for visualization but also for the analysis of structural patterns within networks. In the context of our example, we’ll explore the historic problem of the Seven Bridges of Königsberg.
-
-To begin, we’ll load the ‘igraph’ library and establish two vectors: one for the vertices, representing the landmasses, and one for the edges, representing the bridges. The edges vector will pair the vertices to illustrate the bridges connecting the various landmasses. With these vectors prepared, we can generate graph G using the graph function and subsequently assign the appropriate vertex names for clarity.
-
-Once the graph is constructed, you can inspect its structure by executing print(G) in the console. Simply inputting G will also display the graph’s adjacency list. To visualize G, enter plot(G) on a new line. This will invoke the plotting function and render a graphical representation of the network, allowing you to visually trace the paths between Königsberg’s neighborhoods and bridges.
-
 ```{r setup-one, message=F}
 # Load the igraph package
+if(!require(dplyr)) install.packages("dplyr"); library(dplyr)
 if(!require(igraph)) install.packages("igraph"); library(igraph)
 ```
 
-```{r}
+```{r, message=F, echo=F}
 # list available functions for the igraph package:
 ls("package:igraph")
 ```
@@ -163,31 +146,77 @@ migration_routes <- data.frame(
 Use the ‘igraph’ package to build a directed graph from these data frames. In this graph, each region is a vertex, and each migration route is a directed edge.
 
 ```{r}
-g_humpback <- igraph::graph_from_data_frame(migration_routes, directed = T, vertices = whale_locations)
+G3 <- igraph::graph_from_data_frame(migration_routes, directed = T, vertices = whale_locations)
 ```
 
 ### Visualize the Graph
 Analyze the graph by printing its structure and plotting it. This will help in identifying key migratory paths and regions that are central to whale migration.
 
 ```{r}
-print(g_humpback)
-plot(g_humpback) # looks nicer in this example
-plot(g_humpback, layout = layout_with_gem, edge.curved = TRUE)
+print(G3)
+plot(G3) # looks nicer in this example
+plot(G3, layout = layout_with_gem, edge.curved = TRUE)
 ```
 ### Inspect the graph
 
 ```{r}
 
-is.simple(g_humpback)
-any_multiple(g_humpback)
-which_multiple(g_humpback) 
-count_multiple(g_humpback) 
-any_loop(g_humpback)
-which_loop(g_humpback)
+is.simple(G3)
+any_multiple(G3)
+which_multiple(G3) 
+count_multiple(G3) 
+any_loop(G3)
+which_loop(G3)
 
 ```
 
+## Practice: The strength of migration
+
+To facilitate practical learning, the data frame ‘wt_migration_routes’ has already been constructed with three key columns: ‘from’, ‘to’, and ‘weight’. This structured data captures the migratory routes along with the corresponding weights representing the number of whales traversing each route.
+
 ```{r}
+wt_migration_routes <- 
+  migration_routes %>%
+    dplyr::mutate(weight = stats::runif(n = nrow(migration_routes), min = 0, max = 1) %>% round(digits = 2))
+  
+```
+
+### Crafting the weigthed migration network
+
+Once you have examined the ‘wt_migration_routes’ data frame, proceed to construct the weighted graph ‘G4’. To do this, employ the graph_from_data_frame() function, similar to the previous approach. 
+
+```{r}
+G4 <- igraph::graph_from_data_frame(wt_migration_routes, directed = T, vertices = whale_locations)
+```
+
+### Practical Tips
+
+To view the weight values associated with each edge, use the command `E(G4)$weight`. This will list the weights, helping you understand the intensity of each migratory route.
+To see the names of the vertices, execute `V(G4)$name`. This displays the names of all locations in your graph, facilitating easier identification of the nodes.
+
+```{r}
+E(G4)$weight
+V(G4)$name
+```
+
+
+### Visualise G4
+
+```{r}
+print(G4)
+plot(G4) # looks nicer in this example
+plot(G4, layout = layout_with_gem, edge.curved = TRUE)
+```
+
+### Inspect G4
+
+```{r}
+is.simple(G4)
+any_multiple(G4)
+which_multiple(G4) 
+count_multiple(G4) 
+any_loop(G4)
+which_loop(G4)
 
 ```
 
