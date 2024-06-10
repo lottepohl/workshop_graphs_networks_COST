@@ -1,0 +1,63 @@
+---
+title: "Module1"
+author: "Lotte Pohl"
+date: "6/10/2024"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = T)
+```
+
+## First graph: Kaliningrad Bridge Problem
+
+In our visual representation of the Königsberg bridges challenge, we employ vertices—denoted by V—to stand for Königsberg’s separate quarters, labeled according to the first letter of each area:
+
+L for Lomse
+V for Vorstadt-Haferberg
+K for Kneiphof
+A for Altstadt-Loebenicht
+To depict the bridges linking these regions, we introduce edges—represented by e—assigned the letters p, q, r, s, t, u, and v.
+
+These edges don’t dictate a fixed crossing direction, which tells us our graph is undirected. This contrasts with directed graphs, or digraphs, where each edge, resembling a one-way street, permits passage in just one specified direction.
+
+Note that the resulting graph will not be a complete graph, i.e., a graph in which every vertex is connected to every other vertex by an edge.
+
+Let’s proceed to construct our graph, denoted as G, utilizing the ‘igraph’ package. This package is instrumental not only for visualization but also for the analysis of structural patterns within networks. In the context of our example, we’ll explore the historic problem of the Seven Bridges of Königsberg.
+
+To begin, we’ll load the ‘igraph’ library and establish two vectors: one for the vertices, representing the landmasses, and one for the edges, representing the bridges. The edges vector will pair the vertices to illustrate the bridges connecting the various landmasses. With these vectors prepared, we can generate graph G using the graph function and subsequently assign the appropriate vertex names for clarity.
+
+Once the graph is constructed, you can inspect its structure by executing print(G) in the console. Simply inputting G will also display the graph’s adjacency list. To visualize G, enter plot(G) on a new line. This will invoke the plotting function and render a graphical representation of the network, allowing you to visually trace the paths between Königsberg’s neighborhoods and bridges.
+
+```{r setup-one, message=F}
+# Load the igraph package
+if(!require(igraph)) install.packages("igraph"); library(igraph)
+```
+
+```{r graph-one}
+# Define the vertices
+vertices <- c("L", "V", "K", "A") 
+
+# Define the edges (pairs of neighborhoods connected by a bridge)
+edges <- c("L", "A",
+           "L", "K",
+           "L", "V",
+           "V", "K",
+           "A", "K",
+           "K", "A",
+           "K", "V")
+
+# Create the graph from the edge list
+G <- graph(edges, directed=FALSE)
+
+# Add names to the vertices
+V(G)$name <- vertices
+
+# Plot the graph
+plot(G)
+print(G) #identical to 'G'
+
+# Write your answer above this line
+```
+
+
