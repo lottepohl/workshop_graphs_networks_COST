@@ -17,9 +17,9 @@ if(!require(dplyr)) install.packages("dplyr"); library(dplyr)
 if(!require(igraph)) install.packages("igraph"); library(igraph)
 ```
 
-```{r, message=F, echo=F}
+```{r, message=F}
 # list available functions for the igraph package:
-ls("package:igraph")
+# ls("package:igraph")
 ```
 
 
@@ -154,7 +154,7 @@ Analyze the graph by printing its structure and plotting it. This will help in i
 
 ```{r}
 print(G3)
-plot(G3) # looks nicer in this example
+# plot(G3) # looks nicer in this example
 plot(G3, layout = layout_with_gem, edge.curved = TRUE)
 ```
 ### Inspect the graph
@@ -189,7 +189,7 @@ Once you have examined the ‘wt_migration_routes’ data frame, proceed to cons
 G4 <- igraph::graph_from_data_frame(wt_migration_routes, directed = T, vertices = whale_locations)
 ```
 
-### Practical Tips
+#### Practical Tips
 
 To view the weight values associated with each edge, use the command `E(G4)$weight`. This will list the weights, helping you understand the intensity of each migratory route.
 To see the names of the vertices, execute `V(G4)$name`. This displays the names of all locations in your graph, facilitating easier identification of the nodes.
@@ -203,9 +203,11 @@ V(G4)$name
 ### Visualise G4
 
 ```{r}
-print(G4)
-plot(G4) # looks nicer in this example
-plot(G4, layout = layout_with_gem, edge.curved = TRUE)
+# plot(G4) # looks nicer in this example
+plot(G4, 
+     layout = layout_with_gem, 
+     edge.curved = TRUE,
+     edge.width = E(G4)$weight)
 ```
 
 ### Inspect G4
