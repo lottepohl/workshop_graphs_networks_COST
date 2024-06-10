@@ -60,4 +60,47 @@ print(G) #identical to 'G'
 # Write your answer above this line
 ```
 
+## Practice: Simple and multiple graphs
+
+```{r simple-multiple-graphs}
+## For demonstration purposes, we'll create a simple graph for seven islands in the Mediterranean Sea.
+
+# Creating a data frame for Mediterranean islands with a single column for names.
+mediterranean_islands <- data.frame(
+  name = c(
+    "Sicily", "Sardinia", "Cyprus", "Crete", "Corsica", "Mallorca", "Menorca"
+  )
+)
+
+# Creating a data frame for the simple relations between the islands.
+# Each pair of islands is connected by a single edge, with no island connected to itself.
+relations <- data.frame(
+  from = c(
+    "Sicily", "Sicily", "Sardinia",
+    "Cyprus", "Crete", "Corsica",
+    "Corsica", "Mallorca", "Mallorca"
+  ),
+  to = c(
+    "Sardinia", "Crete", "Corsica",
+    "Crete", "Cyprus", "Mallorca",
+    "Sicily", "Menorca", "Sardinia"
+  )
+)
+
+# Using the igraph package to create a simple graph object from the relations data frame.
+# This graph is undirected, meaning the relationships do not have a specified direction, reflecting the simple nature of the graph.
+# The vertices are defined by the mediterranean_islands data frame.
+g_med_isl <- graph_from_data_frame(relations, directed = FALSE, vertices = mediterranean_islands)
+
+# Complete the code #
+is_simple(g_med_isl)
+any_multiple(g_med_isl)
+count_multiple(g_med_isl)
+any_loop(g_med_isl)
+print(g_med_isl)
+plot(g_med_isl)
+
+# Write your answer above this line
+```
+
 
